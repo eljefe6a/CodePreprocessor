@@ -13,7 +13,7 @@ print "Input file:" + inputFileStr + " Output:" + outputFileStr
 chapter =\
 """
 ---
-template: chaptertemplate
+template: chapter
 name: Chapter {0}
 
 ???
@@ -23,7 +23,7 @@ IG
 section =\
 """
 ---
-template: sectiontemplate
+template: section
 name: {0}
 
 ???
@@ -33,7 +33,7 @@ IG
 regular =\
 """
 ---
-template: regulartemplate
+template: regular
 name: {0}
 
 ???
@@ -43,7 +43,7 @@ IG
 exercise =\
 """
 ---
-template: exercisetemplate
+template: exercise
 name: {0}
 
 ???
@@ -53,8 +53,10 @@ IG
 image =\
 """
 ---
-template: imagetemplate
+template: image
 name: {0}
+
+.main-image[![Alt](images/image.jpg)]
 
 ???
 IG
@@ -63,7 +65,7 @@ IG
 code =\
 """
 ---
-template: codetemplate
+template: code
 name: {0}
 
 ```java
@@ -90,7 +92,7 @@ def processContent(line):
 
     # Parse out hashtag
     hashtag = hashtagPartitions[2]
-    
+
     return hashtagTypes[hashtag].format(hashtagPartitions[0])
 
 outputFile = open(outputFileStr,'w')
