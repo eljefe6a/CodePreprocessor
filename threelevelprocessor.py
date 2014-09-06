@@ -101,7 +101,6 @@ with open(inputFileStr) as inputFile:
   for line in inputFile:
     indentLevel = len(line) - len(line.lstrip())
 
-    print indentLevel
     if indentLevel == 0:
       # Its a chapter
       lineOutput = processChapter(line)
