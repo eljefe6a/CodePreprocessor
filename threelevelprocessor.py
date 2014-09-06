@@ -14,7 +14,7 @@ chapter =\
 """
 ---
 template: chapter
-name: Chapter {0}
+name: {0}
 
 ???
 IG
@@ -96,6 +96,54 @@ def processContent(line):
     return hashtagTypes[hashtag].format(hashtagPartitions[0])
 
 outputFile = open(outputFileStr,'w')
+
+# Write out layouts
+layouts=\
+"""
+name: chapter
+layout: true
+class: center, middle
+
+# {{name}}
+
+---
+name: section
+layout: true
+class: center, middle
+
+# {{name}}
+
+---
+name: regular
+layout: true
+class: top-of-slide
+
+<div class="slide-title">{{name}}</div>
+
+---
+name: exercise
+layout: true
+class: top-of-slide
+
+<div class="slide-title">{{name}}</div>
+
+---
+name: image
+layout: true
+class: top-of-slide
+
+<div class="slide-title">{{name}}</div>
+
+---
+name: code
+layout: true
+class: top-of-slide
+
+<div class="slide-title">{{name}}</div>
+
+"""
+
+outputFile.write(layouts)
 
 with open(inputFileStr) as inputFile:
   for line in inputFile:
