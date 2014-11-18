@@ -3,12 +3,12 @@
 import sys, re
 
 if len(sys.argv) != 3:
-  raise ValueError("Usage: input output")
+  raise ValueError("Usage: input outputdir")
 
 inputFileStr = sys.argv[1]
-outputFileStr = sys.argv[2]
+outputDirStr = sys.argv[2]
 
-print "Input file:" + inputFileStr + " Output:" + outputFileStr
+print "Input file:" + inputFileStr + " Output Dir:" + outputDirStr
 
 chapter =\
 """
@@ -34,6 +34,16 @@ regular =\
 """
 ---
 template: regular
+name: {0}
+
+???
+IG
+"""
+
+demo =\
+"""
+---
+template: demo
 name: {0}
 
 ???
@@ -69,14 +79,32 @@ template: code
 name: {0}
 
 ```java
-!INCLUDE "Class.java" 2-4 3,4 * trim
+!INCLUDE "Class.java" 20 20 * trim
 ```
 
 ???
 IG
 """
 
-hashtagTypes = {"exercise" : exercise, "image" : image, "code" : code}
+twocolumn =\
+"""
+---
+template: regular
+name: {0}
+
+.left-column-75[
+- TODO
+]
+
+.right-column-25[
+.image90[![Alt text](images/image.png)]
+]
+
+???
+IG
+"""
+
+hashtagTypes = {"exercise" : exercise, "image" : image, "code" : code, "demo" : demo, "twocolumn" : twocolumn}
 
 def processChapter(line):
   return chapter.format(line.lstrip())
@@ -95,14 +123,14 @@ def processContent(line):
 
     return hashtagTypes[hashtag].format(hashtagPartitions[0])
 
-outputFile = open(outputFileStr,'w')
+outputFile = None
 
 # Write out layouts
 layouts=\
 """
 name: chapter
 layout: true
-class: center, middle
+class: center, middle, chapter
 
 # {{name}}
 
@@ -128,6 +156,13 @@ class: top-of-slide
 <div class="slide-title">{{name}}</div>
 
 ---
+name: demo
+layout: true
+class: top-of-slide
+
+<div class="slide-title">{{name}}</div>
+
+---
 name: image
 layout: true
 class: top-of-slide
@@ -143,6 +178,7 @@ class: top-of-slide
 
 """
 
+outputFile = open(outputDirStr + "/header.md",'w')
 outputFile.write(layouts)
 
 with open(inputFileStr) as inputFile:
@@ -151,7 +187,14 @@ with open(inputFileStr) as inputFile:
 
     if indentLevel == 0:
       # Its a chapter
+      if outputFile != None:
+        # Close the previous file
+        outputFile.close()
+
       lineOutput = processChapter(line)
+
+      # Open a new file with the name of the chapter as the file name
+      outputFile = open(outputDirStr + "/" + line.lower().replace(" ", "_").strip() + ".md",'w')
     elif indentLevel == 2:
       # Its a section
       lineOutput = processSection(line)
