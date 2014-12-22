@@ -82,7 +82,7 @@ def processIncludeLine(filename, includeLineNumbersArray, highlightLineNumbersAr
 
 with open(inputFileStr) as inputFile:
   for line in inputFile:
-    matchObj = re.match( r'\s*!INCLUDE \"(.*)\"\s?(\d*-\d*)?\s?([0-9,-]+)?\s?(.)?\s?(trim|notrim)?\s*', line)
+    matchObj = re.match( r'\s*!INCLUDE \"(.*)\"\s?([0-9,-]+)?\s?([0-9,-]+)?\s?(.)?\s?(trim|notrim)?\s*', line)
 
     if matchObj:
       # Include directive found
