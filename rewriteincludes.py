@@ -31,7 +31,7 @@ with open(inputFileStr) as inputFile:
         highlightCharacter = matchObj.group(4)
         shouldTrimWhitespace = matchObj.group(5)
 
-        output = "![:include " + filename
+        output = "![:includesource " + filename
 
         if includeLineNumbers is not None:
           output += ", "
