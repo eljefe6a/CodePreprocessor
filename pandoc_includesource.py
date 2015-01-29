@@ -8,6 +8,7 @@ abspath = os.path.abspath(sys.argv[0])
 abspath = os.path.abspath(os.path.join(abspath, os.pardir))
 dname = os.path.dirname(abspath)
 os.chdir(dname)
+print "Current:" + os.getcwd()
 
 def mixrange(s):
     r = []
@@ -23,7 +24,7 @@ def calculateMinWhitespace(filename, includeLineNumbersArray):
   whitespaceCurrentLineNumber = 1
 
   currentMin = sys.maxint
-  with open(filename) as whitespaceIncludeFile:
+  with open(os.path.join(os.getcwd(), filename)) as whitespaceIncludeFile:
     for whitespaceIncludeLine in whitespaceIncludeFile:
       writeLine = True
 
@@ -57,13 +58,13 @@ def processIncludeLine(filename, includeLineNumbersArray, highlightLineNumbersAr
       writeHighlight = False
 
       # Included line numbers provided
-      if includeLineNumbers is not None:
+      if includeLineNumbersArray is not None:
         # Check if the line number is in the list provided
         if currentLineNumber not in includeLineNumbersArray:
           writeLine = False
 
       # Included highlight line numbers provided
-      if highlightLineNumbers is not None:
+      if highlightLineNumbersArray is not None:
         # Check if the line number is in the highlight list provided
         if currentLineNumber in highlightLineNumbersArray:
           writeHighlight = True
