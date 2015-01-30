@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from pandocfilters import toJSONFilter, stringify, Str, Para
+from pandocfilters import toJSONFilter, stringify, CodeBlock
 import sys, re, os
 
 # Change current working directory
@@ -44,7 +44,7 @@ def calculateMinWhitespace(filename, includeLineNumbersArray):
 def processIncludeLine(filename, includeLineNumbersArray, highlightLineNumbersArray, highlightCharacter, shouldTrimWhitespace):
   currentLineNumber = 1
 
-  output = "```\n" # TODO: Add extension
+  output = ""
 
   # print "Including: " + filename + " " + str(includeLineNumbersArray) + " " + str(highlightLineNumbersArray) + " " + highlightCharacter + " " + str(shouldTrimWhitespace)
 
@@ -78,8 +78,6 @@ def processIncludeLine(filename, includeLineNumbersArray, highlightLineNumbersAr
         output += includeLine
 
       currentLineNumber += 1
-
-  output += "```\n"
 
   return output
 
@@ -116,7 +114,9 @@ def includesource(key, value, format, meta):
       else:
         shouldTrimWhitespace = False
 
-      return Para([Str(processIncludeLine(filename, includeLineNumbersArray, highlightLineNumbersArray, highlightCharacter, shouldTrimWhitespace))])
+      extension = os.path.splitext(filename)[1]
+
+      return CodeBlock(['ident', [extension], []], processIncludeLine(filename, includeLineNumbersArray, highlightLineNumbersArray, highlightCharacter, shouldTrimWhitespace))
 
 if __name__ == "__main__":
   toJSONFilter(includesource)
