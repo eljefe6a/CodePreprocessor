@@ -114,13 +114,13 @@ def includesource(key, value, format, meta):
         shouldTrimWhitespace = False
 
       # Use the extension as the code block type
-      extension = os.path.splitext(filename)[1]
+      extension = os.path.splitext(filename)[1].replace(".", "")
 
       if extension == "hql":
         # Change HiveQL to SQL
         extension = "sql"
 
-      return CodeBlock(['ident', [extension], []], processIncludeLine(filename, includeLineNumbersArray, highlightLineNumbersArray, highlightCharacter, shouldTrimWhitespace))
+      return CodeBlock(['', [extension], []], processIncludeLine(filename, includeLineNumbersArray, highlightLineNumbersArray, highlightCharacter, shouldTrimWhitespace))
 
 if __name__ == "__main__":
   toJSONFilter(includesource)
