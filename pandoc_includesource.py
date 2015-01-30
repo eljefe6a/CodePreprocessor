@@ -85,13 +85,12 @@ def includesource(key, value, format, meta):
   if key == 'Para':
     fullLine = stringify(value)
 
+    # For some reason the ! that precedes this line isn't passed in
     matchObj = re.match( r'\s*\[:includesource ([a-zA-Z_\/.]*),?\s?([0-9 -]+)?,?\s?([0-9 -]+)?,?\s?(.)?,?\s?(trim|notrim)?\]\s*', fullLine)
 
     if matchObj:
       # Full Include directive found
       # Parse out options
-      foundInclude = False
-
       filename = matchObj.group(1)
       includeLineNumbers = matchObj.group(2)
       highlightLineNumbers = matchObj.group(3)
@@ -114,7 +113,12 @@ def includesource(key, value, format, meta):
       else:
         shouldTrimWhitespace = False
 
+      # Use the extension as the code block type
       extension = os.path.splitext(filename)[1]
+
+      if extension == "hql":
+        # Change HiveQL to SQL
+        extension = "sql"
 
       return CodeBlock(['ident', [extension], []], processIncludeLine(filename, includeLineNumbersArray, highlightLineNumbersArray, highlightCharacter, shouldTrimWhitespace))
 
