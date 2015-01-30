@@ -1,6 +1,6 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
-from pandocfilters import toJSONFilter, Str
+from pandocfilters import toJSONFilter, stringify, Str, Para
 import sys, re, os
 
 # Change current working directory
@@ -8,7 +8,6 @@ abspath = os.path.abspath(sys.argv[0])
 abspath = os.path.abspath(os.path.join(abspath, os.pardir))
 dname = os.path.dirname(abspath)
 os.chdir(dname)
-print "Current:" + os.getcwd()
 
 def mixrange(s):
     r = []
@@ -45,9 +44,9 @@ def calculateMinWhitespace(filename, includeLineNumbersArray):
 def processIncludeLine(filename, includeLineNumbersArray, highlightLineNumbersArray, highlightCharacter, shouldTrimWhitespace):
   currentLineNumber = 1
 
-  output = ""
+  output = "```\n" # TODO: Add extension
 
-  print "Including: " + filename + " " + str(includeLineNumbersArray) + " " + str(highlightLineNumbersArray) + " " + highlightCharacter + " " + str(shouldTrimWhitespace)
+  # print "Including: " + filename + " " + str(includeLineNumbersArray) + " " + str(highlightLineNumbersArray) + " " + highlightCharacter + " " + str(shouldTrimWhitespace)
 
   if shouldTrimWhitespace == True:
     whiteSpaceToTrim = calculateMinWhitespace(filename, includeLineNumbersArray)
@@ -80,57 +79,44 @@ def processIncludeLine(filename, includeLineNumbersArray, highlightLineNumbersAr
 
       currentLineNumber += 1
 
+  output += "```\n"
+
   return output
 
-foundInclude = False
-includeSoFar = ""
-
 def includesource(key, value, format, meta):
-  global foundInclude
-  global includeSoFar
+  if key == 'Para':
+    fullLine = stringify(value)
 
-  if key == 'Str':
-    if foundInclude == True:
-      includeSoFar += value + " "
-    elif foundInclude == False and value.strip().startswith('[:includesource'):
-      foundInclude = True
-      includeSoFar += value + " "
-    
-    if foundInclude == True:
-      matchObj = re.match( r'\s*\[:includesource ([a-zA-Z_\/.]*),?\s?([0-9 -]+)?,?\s?([0-9 -]+)?,?\s?(.)?,?\s?(trim|notrim)?\]\s*', includeSoFar)
+    matchObj = re.match( r'\s*\[:includesource ([a-zA-Z_\/.]*),?\s?([0-9 -]+)?,?\s?([0-9 -]+)?,?\s?(.)?,?\s?(trim|notrim)?\]\s*', fullLine)
 
-      if matchObj:
-        # Full Include directive found
-        # Parse out options
-        foundInclude = False
+    if matchObj:
+      # Full Include directive found
+      # Parse out options
+      foundInclude = False
 
-        filename = matchObj.group(1)
-        includeLineNumbers = matchObj.group(2)
-        highlightLineNumbers = matchObj.group(3)
-        highlightCharacter = matchObj.group(4)
-        shouldTrimWhitespace = matchObj.group(5)
+      filename = matchObj.group(1)
+      includeLineNumbers = matchObj.group(2)
+      highlightLineNumbers = matchObj.group(3)
+      highlightCharacter = matchObj.group(4)
+      shouldTrimWhitespace = matchObj.group(5)
 
-        if includeLineNumbers is not None:
-          includeLineNumbersArray = mixrange(includeLineNumbers)
+      if includeLineNumbers is not None:
+        includeLineNumbersArray = mixrange(includeLineNumbers)
 
-        if highlightLineNumbers is not None:
-          highlightLineNumbersArray = mixrange(highlightLineNumbers)
+      if highlightLineNumbers is not None:
+        highlightLineNumbersArray = mixrange(highlightLineNumbers)
 
-        if highlightCharacter is None:
-          highlightCharacter = "*"
+      if highlightCharacter is None:
+        highlightCharacter = "*"
 
-        if shouldTrimWhitespace is None:
-          shouldTrimWhitespace = False
-        elif shouldTrimWhitespace == "trim":
-          shouldTrimWhitespace = True
-        else:
-          shouldTrimWhitespace = False
-
-        return Str(processIncludeLine(filename, includeLineNumbersArray, highlightLineNumbersArray, highlightCharacter, shouldTrimWhitespace))
+      if shouldTrimWhitespace is None:
+        shouldTrimWhitespace = False
+      elif shouldTrimWhitespace == "trim":
+        shouldTrimWhitespace = True
       else:
-        # Full include directive not found yet
-        # Return empty array to remove it
-        return []
+        shouldTrimWhitespace = False
+
+      return Para([Str(processIncludeLine(filename, includeLineNumbersArray, highlightLineNumbersArray, highlightCharacter, shouldTrimWhitespace))])
 
 if __name__ == "__main__":
   toJSONFilter(includesource)
