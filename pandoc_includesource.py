@@ -122,6 +122,9 @@ def includesource(key, value, format, meta):
       elif extension == "m":
         # Change m to Objective C
         extension = "objectivec"
+      elif extension == "h":
+        # Change m to Objective C
+        extension = "objectivec"
 
       return CodeBlock(['', [extension], []], processIncludeLine(filename, includeLineNumbersArray, highlightLineNumbersArray, highlightCharacter, shouldTrimWhitespace))
 
