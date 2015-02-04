@@ -119,6 +119,9 @@ def includesource(key, value, format, meta):
       if extension == "hql":
         # Change HiveQL to SQL
         extension = "sql"
+      elif extension == "m":
+        # Change m to Objective C
+        extension = "objectivec"
 
       return CodeBlock(['', [extension], []], processIncludeLine(filename, includeLineNumbersArray, highlightLineNumbersArray, highlightCharacter, shouldTrimWhitespace))
 
