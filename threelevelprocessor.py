@@ -45,6 +45,9 @@ demo =\
 ---
 template: demo
 name: {0}
+minutes: {1}
+
+### We will now demonstrate TODO
 
 ???
 IG
@@ -55,6 +58,12 @@ exercise =\
 ---
 template: exercise
 name: {0}
+minutes: {1}
+file:TODO.md
+
+## In this exercise, you will TODO.
+
+## Time: {{minutes}} minutes
 
 ???
 IG
@@ -121,7 +130,14 @@ def processContent(line):
     # Parse out hashtag
     hashtag = hashtagPartitions[2]
 
-    return hashtagTypes[hashtag].format(hashtagPartitions[0])
+    # Exercises and demos have times
+    if hashtag.startswith("exercise") or hashtag.startswith("demo"):
+      hasttagTime = hashtag.strip().partition(" ")
+
+      print "Found exercise" + str(len(hasttagTime))
+      return hashtagTypes[hasttagTime[0]].format(hashtagPartitions[0], hasttagTime[2])
+    else:
+      return hashtagTypes[hashtag].format(hashtagPartitions[0])
 
 outputFile = None
 
