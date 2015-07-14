@@ -63,7 +63,7 @@ file:TODO.md
 
 ## In this exercise, you will TODO.
 
-## Time: {{minutes}} minutes
+## Time: {{{{minutes}}}} minutes
 
 ???
 IG
