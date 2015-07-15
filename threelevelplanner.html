@@ -165,6 +165,7 @@ function displayChapters(chapterTimes) {
   html += "<th>Name</th>"
   html += "<th>Run Time</th>"
   html += "<th># Slides</th>"
+  html += "<th>Total Time</th>"
   html += "<th>Slide Time</th>"
   html += "<th>Ex Time</th>"
   html += "<th>Demo Time</th>"
@@ -175,18 +176,13 @@ function displayChapters(chapterTimes) {
 
     html += "<tr>"
     html += "<td>" + chapterTimes["chapters"][i]["chaptername"] + "</td>"
-    html += "<td>" + chapterTimes["chapters"][i]["overallruntimedays"] + "D " + chapterTimes["chapters"][i]["overallruntimehours"] + "H" + "</td>"
+    html += "<td>" + chapterTimes["chapters"][i]["overallruntimedays"] + "D " + toHHMM(chapterTimes["chapters"][i]["overallruntimeminutes"]) + "</td>"
     html += "<td>" + chapterTimes["chapters"][i]["chapterslides"] + "</td>"
-    html += "<td>" + totalSlideTime.toFixed(1) + "</td>"
-    html += "<td>" + chapterTimes["chapters"][i]["chapterexerciseminutes"] + "</td>"
-    html += "<td>" + chapterTimes["chapters"][i]["chapterdemominutes"] + "</td>"
+    html += "<td>" + toHHMM(chapterTimes["chapters"][i]["chaptertotaltime"]) + "</td>"
+    html += "<td>" + toHHMM(totalSlideTime.toFixed()) + "</td>"
+    html += "<td>" + toHHMM(chapterTimes["chapters"][i]["chapterexerciseminutes"]) + "</td>"
+    html += "<td>" + toHHMM(chapterTimes["chapters"][i]["chapterdemominutes"]) + "</td>"
     html += "</tr>"
-
-/*
-    html += "<tr>"
-    html += "<td>" + chapterTimes["chapters"][i]["overallruntimedays"] + "D " + chapterTimes["chapters"][i]["overallruntimehours"] + "H" + "</td>"
-    html += "</tr>"
-    */
   }
 
   html += "</table>"
@@ -198,11 +194,11 @@ function displayChapters(chapterTimes) {
   html += "<br><br>Total times in minutes:<br>"
   html += "<table>"
 
-  html += "<tr><td>Total Time</td><td>" + totalCourseTime.toFixed(2) + "</td></tr>"
+  html += "<tr><td>Total Time</td><td>" + toHHMM(totalCourseTime.toFixed()) + "</td></tr>"
   html += "<tr><td>Total Slides</td><td>" + chapterTimes["total"]["totalregular"] + "</td></tr>"
-  html += "<tr><td>Total Slide Time</td><td>" + totalSlideTime.toFixed(2) + "</td></tr>"
-  html += "<tr><td>Total Demos</td><td>" + chapterTimes["total"]["totaldemos"] + "</td></tr>"
-  html += "<tr><td>Total Exercises</td><td>" + chapterTimes["total"]["totalexercises"] + "</td></tr>"
+  html += "<tr><td>Total Slide Time</td><td>" + toHHMM(totalSlideTime.toFixed()) + "</td></tr>"
+  html += "<tr><td>Total Demos</td><td>" + toHHMM(chapterTimes["total"]["totaldemos"]) + "</td></tr>"
+  html += "<tr><td>Total Exercises</td><td>" + toHHMM(chapterTimes["total"]["totalexercises"]) + "</td></tr>"
 
   html += "</table>"
 
@@ -217,31 +213,39 @@ function outputChapterTime(regular, demoMinutes, exerciseMinutes, slidesPerHour,
 
   chapterMap = {
     "overallruntimedays": chapterTime[0],
-    "overallruntimehours": chapterTime[1],
+    "overallruntimeminutes": chapterTime[1],
     "chapter": chapters,
     "chaptername": currentChapterName,
     "chapterslides": currentSlides,
     "chapterexerciseminutes": currentExerciseMinutes,
     "chapterdemominutes": currentDemoMinutes,
-    "chaptertotaltime": ((currentSlides * (60 / slidesPerHour)) + currentExerciseMinutes + currentDemoMinutes).toFixed(0)
+    "chaptertotaltime": ((currentSlides * (60 / slidesPerHour)) + currentExerciseMinutes + currentDemoMinutes).toFixed()
   }
 
   return chapterMap
 }
 
 // Calculates the current run time
-function calculateTime(slides, demo, exercise, slidesPerHour) {
+function calculateTime(slides, demo, exercise, slidesPerHour, hoursPerDay) {
   var totalMinutes = ((slides / slidesPerHour) * 60) + demo + exercise
-  var hoursPerDay = 4.0
-
+  
   var days = Math.ceil(totalMinutes / (60 * hoursPerDay))
 
-  var hours = (totalMinutes - ((days - 1) * hoursPerDay * 60)) / 60
+  var minutes = (totalMinutes - ((days - 1) * hoursPerDay * 60)).toFixed()
 
-  return [days, hours.toFixed(2)]
+  return [days, minutes]
 }
 
+function toHHMM(minutes) {
+  realMinutes = minutes % 60
+  hours = (minutes - realMinutes) / 60
 
+  return pad(hours, 1) + ":" + pad(realMinutes, 2)
+}
+
+function pad(value, length) {
+    return (value.toString().length < length) ? pad("0"+value, length):value;
+}
 
     </script>
     
