@@ -38,6 +38,7 @@ function showTime() {
 
   allLines = $( "#threelevel" ).text().split("\n")
 
+  $( "#time" ).html("")
   
   var chapters = -1;
   var sections = 0;
@@ -90,7 +91,7 @@ function showTime() {
 
   outputChapterTime(regular, demoMinutes, exerciseMinutes, slidesPerHour, chapters, currentChapterName, currentSlides, currentExerciseMinutes, currentDemoMinutes, hoursPerDay)
 
-  $( "#time" ).html("Overall stats chapters:" + chapters + " sections:" + sections +
+  $( "#time" ).append("Overall stats chapters:" + chapters + " sections:" + sections +
    " regular:" + regular + " demos:" + demoMinutes + " exercises:" + exerciseMinutes +
    " slidesPerHour:" + slidesPerHour)
 }
@@ -108,9 +109,9 @@ function outputChapterTime(regular, demoMinutes, exerciseMinutes, slidesPerHour,
     toLog += " " + currentDemoMinutes + " minutes of demos."
   }
 
-  toLog += " Total chapter time: " + ((currentSlides * (60 / slidesPerHour)) + currentExerciseMinutes + currentDemoMinutes).toFixed(0) + " minutes."
+  toLog += " Total chapter time: " + ((currentSlides * (60 / slidesPerHour)) + currentExerciseMinutes + currentDemoMinutes).toFixed(0) + " minutes.<br>"
 
-  return console.log(toLog)
+  $( "#time" ).append(toLog)
 }
 
 // Calculates the current run time
