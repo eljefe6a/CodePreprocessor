@@ -20,7 +20,16 @@
     <script type="text/javascript">
 $( document ).ready(function() {
   loadFile();
+
+  $('#threelevel').keyup(function() {
+    showTime();
+  });
+
+  $('#threelevel').change(function() {
+    showTime();
+  });
 });
+
 
 function loadFile() {
   $.get( "/classes/SVDA/three_level.txt", function( data ) {
@@ -140,24 +149,30 @@ function calculateTime(slides, demo, exercise, slidesPerHour) {
 
     </script>
     
-    Three Level:
-    <textarea id="threelevel">Text</textarea>
+    <div id="threeleveldiv">
+      Three Level:
+      <textarea id="threelevel">Text</textarea>
+    </div>
 
-    Hours Per Day:
-    <input id="hoursperday" type="text" value="6.5">
+    <div id="settings">
+      Hours Per Day:
+      <input id="hoursperday" type="text" value="6.5">
 
-    Slides Per Hour:
-    <input id="slidesperhour" type="text" value="21">
+      Slides Per Hour:
+      <input id="slidesperhour" type="text" value="21">
 
-    Demo Multiplier:
-    <input id="demomultiplier" type="text" value="1">
+      Demo Multiplier:
+      <input id="demomultiplier" type="text" value="1">
 
-    Exercise Multiplier:
-    <input id="exercisemultiplier" type="text" value="1">
+      Exercise Multiplier:
+      <input id="exercisemultiplier" type="text" value="1">
+    </div>
 
-    Time:
-    <div id="time"></div>
+    <div id="timediv">
+      Time:
+      <div id="time"></div>
 
-    <div>TODO: add slides to exercises ratio</div>
+      <div>TODO: add slides to exercises ratio</div>
+    </div>
   </body>
 </html>
