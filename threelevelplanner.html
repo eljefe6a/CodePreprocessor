@@ -57,6 +57,12 @@ $( document ).ready(function() {
   $('#threelevel').change(function() {
     showTime();
   });
+
+  jQuery(window).bind('beforeunload', function(e) {
+    var message = "Save out the three level first!!!!!!!";
+    e.returnValue = message;
+    return message;
+  });
 });
 
 
@@ -163,7 +169,7 @@ function displayChapters(chapterTimes) {
 
   html += "<table><thead><tr>"
   html += "<th>Name</th>"
-  html += "<th>Run Time</th>"
+  html += "<th>End Time</th>"
   html += "<th># Slides</th>"
   html += "<th>Total Time</th>"
   html += "<th>Slide Time</th>"
