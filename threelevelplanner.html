@@ -45,7 +45,7 @@ function showTime() {
   var demoMultiplier = parseInt($( "#demomultiplier" ).val())
   var exerciseMultiplier = parseInt($( "#exercisemultiplier" ).val())
 
-  allLines = $( "#threelevel" ).text().split("\n")
+  allLines = $( "#threelevel" ).val().split("\n")
 
   $( "#time" ).html("")
   
@@ -63,6 +63,9 @@ function showTime() {
   var m;
   var demoRE = /#demo\s+(\d+)/;
   var exerciseRE = /#exercise\s+(\d+)/;
+  
+  var sectionNoSlides = /\s{2}(.*)/;
+  var sectionWithSlides = /\s{2}(.*) (\d+)/;
 
   chapterTimes = new Map()
   chapterTimes["chapters"] = []
@@ -83,7 +86,16 @@ function showTime() {
         currentSlides++;
       }
     // Process sections
-    } else if (allLines[i].startsWith("  ")) { 
+    } else if ((m = sectionWithSlides.exec(allLines[i])) !== null) {
+      sections++;
+
+      if(typeof m[2] !== 'undefined'){
+        // If the section has a slide count, use it
+        sectionSlides = parseInt(m[2])
+        regular += sectionSlides
+        currentSlides += sectionSlides
+      }
+    } else if ((m = sectionNoSlides.exec(allLines[i])) !== null) {
       sections++;
     // Process chapters
     } else {
