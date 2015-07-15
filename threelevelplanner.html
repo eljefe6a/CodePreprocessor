@@ -11,8 +11,40 @@
       @import url(http://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
 
       #threelevel {
-        width: 300px;
-        height: 300px;
+        width: 90%;
+        height: 500px;
+      }
+
+      #threeleveldiv {
+        flex: 3 0 0px;
+        overflow: hidden;
+        align-items: center;
+        justify-content: center;
+        align-self: center;
+
+        display: flex;
+        flex-direction: column;
+
+        height: 90%;
+      }
+
+      #timediv {
+        flex: 1 0 0px;
+
+        display: flex;
+        flex-direction: column;
+      }
+
+      #settingsdiv {
+        flex: 0.5 0 0px;
+        overflow: hidden;
+
+        display: flex;
+        flex-direction: column;
+      }
+
+      #content {
+        display: flex;
       }
     </style>
   </head>
@@ -128,6 +160,13 @@ function showTime() {
 }
 
 function displayChapters(chapterTimes) {
+  html = ""
+
+  for (var i = 0; i < chapterTimes["chapters"].length; i++) {
+    html += chapterTimes["chapters"][i]["overallruntime"] + " " + chapterTimes["chapters"][i]["chaptername"] + " " + chapterTimes["chapters"][i]["chapterslides"] + "<br>"
+  }
+
+  $("#time").html(html)
   console.dir(chapterTimes)
 }
 
@@ -161,30 +200,33 @@ function calculateTime(slides, demo, exercise, slidesPerHour) {
 
     </script>
     
-    <div id="threeleveldiv">
-      Three Level:
-      <textarea id="threelevel">Text</textarea>
-    </div>
+    <div id="content">
+      <div id="threeleveldiv">
+        Three Level:
+        <textarea id="threelevel">Text</textarea>
+      </div>
 
-    <div id="settings">
-      Hours Per Day:
-      <input id="hoursperday" type="text" value="6.5">
+      <div id="timediv">
+        Time:
+        <div id="time"></div>
 
-      Slides Per Hour:
-      <input id="slidesperhour" type="text" value="21">
+        <div>TODO: add slides to exercises ratio</div>
+      </div>
 
-      Demo Multiplier:
-      <input id="demomultiplier" type="text" value="1">
+      <div id="settingsdiv">
+        Settings:<br>
+        Hours Per Day:
+        <input id="hoursperday" type="text" value="6.5">
 
-      Exercise Multiplier:
-      <input id="exercisemultiplier" type="text" value="1">
-    </div>
+        Slides Per Hour:
+        <input id="slidesperhour" type="text" value="21">
 
-    <div id="timediv">
-      Time:
-      <div id="time"></div>
+        Demo Multiplier:
+        <input id="demomultiplier" type="text" value="1">
 
-      <div>TODO: add slides to exercises ratio</div>
+        Exercise Multiplier:
+        <input id="exercisemultiplier" type="text" value="1">
+      </div>
     </div>
   </body>
 </html>
