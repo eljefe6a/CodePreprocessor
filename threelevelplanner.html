@@ -27,15 +27,14 @@
       }
 
       #timediv {
-        flex: 1 0 0px;
+        flex: 1.5 0 0px;
 
         display: flex;
         flex-direction: column;
       }
 
       #settingsdiv {
-        flex: 0.5 0 0px;
-        overflow: hidden;
+        padding-top: 20px;
 
         display: flex;
         flex-direction: column;
@@ -158,16 +157,36 @@ function showTime() {
 }
 
 function displayChapters(chapterTimes) {
+  slidesPerMinute = 60 / chapterTimes["total"]["slidesperhour"]
+
   html = ""
 
-  html += "<table>"
+  html += "<table><thead><tr>"
+  html += "<th>Name</th>"
+  html += "<th>Run Time</th>"
+  html += "<th># Slides</th>"
+  html += "<th>Slide Time</th>"
+  html += "<th>Ex Time</th>"
+  html += "<th>Demo Time</th>"
+  html += "</thead>"
 
   for (var i = 0; i < chapterTimes["chapters"].length; i++) {
+    totalSlideTime = chapterTimes["chapters"][i]["chapterslides"] * slidesPerMinute
+
     html += "<tr>"
     html += "<td>" + chapterTimes["chapters"][i]["chaptername"] + "</td>"
     html += "<td>" + chapterTimes["chapters"][i]["overallruntimedays"] + "D " + chapterTimes["chapters"][i]["overallruntimehours"] + "H" + "</td>"
     html += "<td>" + chapterTimes["chapters"][i]["chapterslides"] + "</td>"
+    html += "<td>" + totalSlideTime.toFixed(1) + "</td>"
+    html += "<td>" + chapterTimes["chapters"][i]["chapterexerciseminutes"] + "</td>"
+    html += "<td>" + chapterTimes["chapters"][i]["chapterdemominutes"] + "</td>"
     html += "</tr>"
+
+/*
+    html += "<tr>"
+    html += "<td>" + chapterTimes["chapters"][i]["overallruntimedays"] + "D " + chapterTimes["chapters"][i]["overallruntimehours"] + "H" + "</td>"
+    html += "</tr>"
+    */
   }
 
   html += "</table>"
@@ -235,21 +254,21 @@ function calculateTime(slides, demo, exercise, slidesPerHour) {
       <div id="timediv">
         Chapter Times:
         <div id="time"></div>
-      </div>
+      
+        <div id="settingsdiv">
+          Settings:<br>
+          Hours Per Day:
+          <input id="hoursperday" type="text" value="6.5">
 
-      <div id="settingsdiv">
-        Settings:<br>
-        Hours Per Day:
-        <input id="hoursperday" type="text" value="6.5">
+          Slides Per Hour:
+          <input id="slidesperhour" type="text" value="21">
 
-        Slides Per Hour:
-        <input id="slidesperhour" type="text" value="21">
+          Demo Multiplier:
+          <input id="demomultiplier" type="text" value="1">
 
-        Demo Multiplier:
-        <input id="demomultiplier" type="text" value="1">
-
-        Exercise Multiplier:
-        <input id="exercisemultiplier" type="text" value="1">
+          Exercise Multiplier:
+          <input id="exercisemultiplier" type="text" value="1">
+        </div>
       </div>
     </div>
   </body>
