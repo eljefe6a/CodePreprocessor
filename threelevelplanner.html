@@ -50,22 +50,29 @@ function showTime() {
   var currentExerciseMinutes = 0;
   var currentChapterName = ""
 
+  var m;
+  var demoRE = /#demo\s+(\d+)/;
+  var exerciseRE = /#exercise\s+(\d+)/;
+
   for (var i = 0; i < allLines.length; i++) {
+    // Process regular slides
     if (allLines[i].startsWith("    ")) {
-      if (allLines[i].includes("#demo")) {
-        var minutes = parseInt(allLines[i].split(" ")[7]) * demoMultiplier
+      if ((m = demoRE.exec(allLines[i])) !== null) {
+        var minutes = parseInt(m[1]) * demoMultiplier
         demoMinutes += minutes;
         currentDemoMinutes += minutes;
-      } else if (allLines[i].includes("#exercise")) {
-        var minutes = parseInt(allLines[i].split(" ")[7]) * exerciseMultiplier
+      } else if ((m = exerciseRE.exec(allLines[i])) !== null) {
+        var minutes = parseInt(m[1]) * exerciseMultiplier
         exerciseMinutes += minutes;
         currentExerciseMinutes += minutes;
       } else {
         regular++;
         currentSlides++;
       }
+    // Process sections
     } else if (allLines[i].startsWith("  ")) { 
       sections++;
+    // Process chapters
     } else {
       chapters++;
 
@@ -139,5 +146,7 @@ function calculateTime(slides, demo, exercise, slidesPerHour) {
 
     Time:
     <div id="time"></div>
+
+    <div>TODO: add slides to exercises ratio</div>
   </body>
 </html>
