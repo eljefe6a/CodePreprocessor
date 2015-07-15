@@ -160,9 +160,17 @@ function showTime() {
 function displayChapters(chapterTimes) {
   html = ""
 
+  html += "<table>"
+
   for (var i = 0; i < chapterTimes["chapters"].length; i++) {
-    html += chapterTimes["chapters"][i]["overallruntime"] + " " + chapterTimes["chapters"][i]["chaptername"] + " " + chapterTimes["chapters"][i]["chapterslides"] + "<br>"
+    html += "<tr>"
+    html += "<td>" + chapterTimes["chapters"][i]["chaptername"] + "</td>"
+    html += "<td>" + chapterTimes["chapters"][i]["overallruntimedays"] + "D " + chapterTimes["chapters"][i]["overallruntimehours"] + "H" + "</td>"
+    html += "<td>" + chapterTimes["chapters"][i]["chapterslides"] + "</td>"
+    html += "</tr>"
   }
+
+  html += "</table>"
 
   slidesPerMinute = 60 / chapterTimes["total"]["slidesperhour"]
   totalSlideTime = chapterTimes["total"]["totalregular"] * slidesPerMinute
@@ -185,8 +193,12 @@ function displayChapters(chapterTimes) {
 }
 
 function outputChapterTime(regular, demoMinutes, exerciseMinutes, slidesPerHour, chapters, currentChapterName, currentSlides, currentExerciseMinutes, currentDemoMinutes, hoursPerDay) {
+
+  chapterTime = calculateTime(regular, demoMinutes, exerciseMinutes, slidesPerHour, hoursPerDay)
+
   chapterMap = {
-    "overallruntime": this.calculateTime(regular, demoMinutes, exerciseMinutes, slidesPerHour, hoursPerDay),
+    "overallruntimedays": chapterTime[0],
+    "overallruntimehours": chapterTime[1],
     "chapter": chapters,
     "chaptername": currentChapterName,
     "chapterslides": currentSlides,
@@ -207,7 +219,7 @@ function calculateTime(slides, demo, exercise, slidesPerHour) {
 
   var hours = (totalMinutes - ((days - 1) * hoursPerDay * 60)) / 60
 
-  return "Day " + days + " " + hours.toFixed(2) + " hours"
+  return [days, hours.toFixed(2)]
 }
 
 
