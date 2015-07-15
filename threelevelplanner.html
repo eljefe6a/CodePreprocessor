@@ -55,6 +55,9 @@ function showTime() {
   var demoRE = /#demo\s+(\d+)/;
   var exerciseRE = /#exercise\s+(\d+)/;
 
+  chapterTimes = new Map()
+  chapterTimes["chapters"] = []
+
   for (var i = 0; i < allLines.length; i++) {
     // Process regular slides
     if (allLines[i].startsWith("    ")) {
@@ -78,7 +81,7 @@ function showTime() {
       chapters++;
 
       if (chapters != 0) {
-        this.outputChapterTime(regular, demoMinutes, exerciseMinutes, slidesPerHour, chapters, currentChapterName, currentSlides, currentExerciseMinutes, currentDemoMinutes, hoursPerDay)
+        chapterTimes["chapters"].push(this.outputChapterTime(regular, demoMinutes, exerciseMinutes, slidesPerHour, chapters, currentChapterName, currentSlides, currentExerciseMinutes, currentDemoMinutes, hoursPerDay))
 
         currentSlides = 0;
         currentExerciseMinutes = 0;
@@ -89,29 +92,36 @@ function showTime() {
     }
   }
 
-  outputChapterTime(regular, demoMinutes, exerciseMinutes, slidesPerHour, chapters, currentChapterName, currentSlides, currentExerciseMinutes, currentDemoMinutes, hoursPerDay)
+  chapterTimes["chapters"].push(outputChapterTime(regular, demoMinutes, exerciseMinutes, slidesPerHour, chapters, currentChapterName, currentSlides, currentExerciseMinutes, currentDemoMinutes, hoursPerDay))
 
-  $( "#time" ).append("Overall stats chapters:" + chapters + " sections:" + sections +
-   " regular:" + regular + " demos:" + demoMinutes + " exercises:" + exerciseMinutes +
-   " slidesPerHour:" + slidesPerHour)
+  chapterTimes["total"] = {
+    "totalchapters": chapters,
+    "totalsections": sections,
+    "totalregular": regular,
+    "totaldemos": demoMinutes,
+    "totalexercises": exerciseMinutes,
+    "slidesperhour": slidesPerHour
+  }
+
+  displayChapters(chapterTimes)
+}
+
+function displayChapters(chapterTimes) {
+  console.dir(chapterTimes)
 }
 
 function outputChapterTime(regular, demoMinutes, exerciseMinutes, slidesPerHour, chapters, currentChapterName, currentSlides, currentExerciseMinutes, currentDemoMinutes, hoursPerDay) {
-  var toLog = this.calculateTime(regular, demoMinutes, exerciseMinutes, slidesPerHour, hoursPerDay) + 
-    " Chapter " + chapters + " " + currentChapterName +
-    " - " + currentSlides + " slides."
-
-  if (currentExerciseMinutes != 0) {
-    toLog += " " + currentExerciseMinutes + " minutes of exercises."
+  chapterMap = {
+    "overallruntime": this.calculateTime(regular, demoMinutes, exerciseMinutes, slidesPerHour, hoursPerDay),
+    "chapter": chapters,
+    "chaptername": currentChapterName,
+    "chapterslides": currentSlides,
+    "chapterexerciseminutes": currentExerciseMinutes,
+    "chapterdemominutes": currentDemoMinutes,
+    "chaptertotaltime": ((currentSlides * (60 / slidesPerHour)) + currentExerciseMinutes + currentDemoMinutes).toFixed(0)
   }
 
-  if (currentDemoMinutes != 0) {
-    toLog += " " + currentDemoMinutes + " minutes of demos."
-  }
-
-  toLog += " Total chapter time: " + ((currentSlides * (60 / slidesPerHour)) + currentExerciseMinutes + currentDemoMinutes).toFixed(0) + " minutes.<br>"
-
-  $( "#time" ).append(toLog)
+  return chapterMap
 }
 
 // Calculates the current run time
