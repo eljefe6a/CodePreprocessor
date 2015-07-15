@@ -12,7 +12,7 @@
 
       #threelevel {
         width: 90%;
-        height: 500px;
+        height: 90vh;
       }
 
       #threeleveldiv {
@@ -24,8 +24,6 @@
 
         display: flex;
         flex-direction: column;
-
-        height: 90%;
       }
 
       #timediv {
@@ -166,6 +164,23 @@ function displayChapters(chapterTimes) {
     html += chapterTimes["chapters"][i]["overallruntime"] + " " + chapterTimes["chapters"][i]["chaptername"] + " " + chapterTimes["chapters"][i]["chapterslides"] + "<br>"
   }
 
+  slidesPerMinute = 60 / chapterTimes["total"]["slidesperhour"]
+  totalSlideTime = chapterTimes["total"]["totalregular"] * slidesPerMinute
+  totalCourseTime = totalSlideTime + chapterTimes["total"]["totaldemos"] + chapterTimes["total"]["totalexercises"]
+
+  html += "<br><br>Total times in minutes:<br>"
+  html += "<table>"
+
+  html += "<tr><td>Total Time</td><td>" + totalCourseTime.toFixed(2) + "</td></tr>"
+  html += "<tr><td>Total Slides</td><td>" + chapterTimes["total"]["totalregular"] + "</td></tr>"
+  html += "<tr><td>Total Slide Time</td><td>" + totalSlideTime.toFixed(2) + "</td></tr>"
+  html += "<tr><td>Total Demos</td><td>" + chapterTimes["total"]["totaldemos"] + "</td></tr>"
+  html += "<tr><td>Total Exercises</td><td>" + chapterTimes["total"]["totalexercises"] + "</td></tr>"
+
+  html += "</table>"
+
+  html += "<br><br>" + (((chapterTimes["total"]["totaldemos"] + chapterTimes["total"]["totalexercises"]) / totalCourseTime) * 100).toFixed(1) + "% of class time is exercises/demos"
+
   $("#time").html(html)
 }
 
@@ -206,10 +221,8 @@ function calculateTime(slides, demo, exercise, slidesPerHour) {
       </div>
 
       <div id="timediv">
-        Time:
+        Chapter Times:
         <div id="time"></div>
-
-        <div>TODO: add slides to exercises ratio</div>
       </div>
 
       <div id="settingsdiv">
