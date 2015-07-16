@@ -1,12 +1,18 @@
 #!/usr/bin/python
 
-import sys, re
+import sys, re, os
 
 if len(sys.argv) != 3:
   raise ValueError("Usage: input outputdir")
 
 inputFileStr = sys.argv[1]
 outputDirStr = sys.argv[2]
+
+if os.path.exists(outputDirStr):
+  if os.path.isdir(outputDirStr) == False:
+    raise ValueError("outputdir must be a directory")
+else:
+  os.makedirs(outputDirStr)
 
 print "Input file:" + inputFileStr + " Output Dir:" + outputDirStr
 
