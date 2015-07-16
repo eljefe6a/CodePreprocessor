@@ -50,6 +50,11 @@
 $( document ).ready(function() {
   loadFile();
 
+  getParamOrDefault("hoursperday", 6.5, $('#hoursperday'))
+  getParamOrDefault("slidesperhour", 21, $('#slidesperhour'))
+  getParamOrDefault("demomultiplier", 1, $('#demomultiplier'))
+  getParamOrDefault("exercisemultiplier", 1, $('#exercisemultiplier'))
+
   $('#threelevel').keyup(function() {
     showTime();
   });
@@ -57,17 +62,24 @@ $( document ).ready(function() {
   $('#threelevel').change(function() {
     showTime();
   });
-
-  jQuery(window).bind('beforeunload', function(e) {
-    var message = "Save out the three level first!!!!!!!";
-    e.returnValue = message;
-    return message;
-  });
 });
 
+function getParamOrDefault(param, defaultValue, input) {
+  paramValue = $.urlParam(param)
+
+  if(paramValue == null) {
+    paramValue = defaultValue
+  }
+
+  console.log(param + " set to \"" + paramValue + "\"")
+
+  input.val(paramValue)
+}
 
 function loadFile() {
-  $.get( "/classes/SVDA/three_level.txt", function( data ) {
+  console.log("Using three level " + $.urlParam('threelevelpath'))
+
+  $.get($.urlParam('threelevelpath'), function( data ) {
     $( "#threelevel" ).text( data );
     
     showTime();
@@ -253,6 +265,15 @@ function pad(value, length) {
     return (value.toString().length < length) ? pad("0"+value, length):value;
 }
 
+$.urlParam = function(name){
+    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+    if (results==null){
+       return null;
+    }
+    else{
+       return results[1] || 0;
+    }
+}
     </script>
     
     <div id="content">
