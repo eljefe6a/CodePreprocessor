@@ -182,7 +182,7 @@ function displayChapters(chapterTimes) {
 
     html += "<tr>"
     html += "<td>" + chapterTimes["chapters"][i]["chaptername"] + "</td>"
-    html += "<td>" + chapterTimes["chapters"][i]["overallruntimedays"] + "D " + toHHMM(chapterTimes["chapters"][i]["overallruntimeminutes"]) + "</td>"
+    html += "<td>D" + chapterTimes["chapters"][i]["overallruntimedays"] + " " + toHHMM(chapterTimes["chapters"][i]["overallruntimeminutes"]) + "</td>"
     html += "<td>" + chapterTimes["chapters"][i]["chapterslides"] + "</td>"
     html += "<td>" + toHHMM(chapterTimes["chapters"][i]["chaptertotaltime"]) + "</td>"
     html += "<td>" + toHHMM(totalSlideTime.toFixed()) + "</td>"
