@@ -87,9 +87,7 @@ code =\
 template: code
 name: {0}
 
-```java
-!INCLUDE "Class.java" 20 20 * trim
-```
+![:includesource Class.java, 20, 20, *, trim]
 
 ???
 IG
@@ -101,12 +99,9 @@ twocolumn =\
 template: regular
 name: {0}
 
-.left-column-75[
-- TODO
-]
-
-.right-column-25[
-.image90[![Alt text](images/image.png)]
+.list-container.list-container-75-25[
+* TODO
+* .image90[![Alt text](images/image.png)]
 ]
 
 ???
@@ -134,7 +129,6 @@ def processContent(line):
     if hashtag.startswith("exercise") or hashtag.startswith("demo"):
       hasttagTime = hashtag.strip().partition(" ")
 
-      print "Found exercise" + str(len(hasttagTime))
       return hashtagTypes[hasttagTime[0]].format(hashtagPartitions[0], hasttagTime[2])
     else:
       return hashtagTypes[hashtag].format(hashtagPartitions[0])
