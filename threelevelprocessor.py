@@ -133,11 +133,11 @@ def processContent(line):
 
     # Exercises and demos have times
     if hashtag.startswith("exercise") or hashtag.startswith("demo"):
-      hasttagTime = hashtag.strip().partition(" ")
+      hashtagTime = hashtag.strip().partition(" ")
 
-      return hashtagTypes[hasttagTime[0]].format(hashtagPartitions[0], hasttagTime[2])
+      return hashtagTypes[hashtagTime[0]].format(hashtagPartitions[0].trim(), hashtagTime[2].trim())
     else:
-      return hashtagTypes[hashtag].format(hashtagPartitions[0])
+      return hashtagTypes[hashtag].format(hashtagPartitions[0].trim())
 
 outputFile = None
 
