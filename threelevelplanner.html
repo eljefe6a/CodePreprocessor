@@ -10,6 +10,10 @@
       @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
       @import url(http://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
 
+      body {
+        font-family: Arial;
+      }
+
       #threelevel {
         width: 90%;
         height: 90vh;
@@ -42,6 +46,52 @@
 
       #content {
         display: flex;
+      }
+
+      #chaptertimes {
+        border: 1px;
+        border-collapse:collapse;
+      }
+
+      #chaptertimes tbody tr:nth-child(odd) {
+        background-color: #F0F0F0;
+      }
+
+      #chaptertimes td {
+        padding:3px;
+      }
+
+      #chaptertimes td:last-child {
+        padding-right:10px;
+      }
+
+      #totaltimes {
+        border: 1px;
+        border-collapse:collapse;
+      }
+
+      #totaltimes tbody tr:nth-child(odd) {
+        background-color: #F0F0F0;
+      }
+
+      #totaltimes td {
+        padding:5px;
+      }
+
+      #hoursperday {
+        width: 100px;
+      }
+
+      #slidesperhour {
+        width: 100px;
+      }
+
+      #demomultiplier {
+        width: 100px;
+      }
+
+      #exercisemultiplier {
+        width: 100px;
       }
     </style>
   </head>
@@ -187,7 +237,7 @@ function displayChapters(chapterTimes) {
 
   html = ""
 
-  html += "<table><thead><tr>"
+  html += "<table id=\"chaptertimes\" class=\"table-striped\"><thead><tr>"
   html += "<th>Name</th>"
   html += "<th>End Time</th>"
   html += "<th># Slides</th>"
@@ -203,11 +253,11 @@ function displayChapters(chapterTimes) {
     html += "<tr>"
     html += "<td>" + chapterTimes["chapters"][i]["chaptername"] + "</td>"
     html += "<td>D" + chapterTimes["chapters"][i]["overallruntimedays"] + " " + toHHMM(chapterTimes["chapters"][i]["overallruntimeminutes"]) + "</td>"
-    html += "<td>" + chapterTimes["chapters"][i]["chapterslides"] + "</td>"
-    html += "<td>" + toHHMM(chapterTimes["chapters"][i]["chaptertotaltime"]) + "</td>"
-    html += "<td>" + toHHMM(totalSlideTime.toFixed()) + "</td>"
-    html += "<td>" + toHHMM(chapterTimes["chapters"][i]["chapterexerciseminutes"]) + "</td>"
-    html += "<td>" + toHHMM(chapterTimes["chapters"][i]["chapterdemominutes"]) + "</td>"
+    html += "<td align=\"right\">" + chapterTimes["chapters"][i]["chapterslides"] + "</td>"
+    html += "<td align=\"right\">" + toHHMM(chapterTimes["chapters"][i]["chaptertotaltime"]) + "</td>"
+    html += "<td align=\"right\">" + toHHMM(totalSlideTime.toFixed()) + "</td>"
+    html += "<td align=\"right\">" + toHHMM(chapterTimes["chapters"][i]["chapterexerciseminutes"]) + "</td>"
+    html += "<td align=\"right\">" + toHHMM(chapterTimes["chapters"][i]["chapterdemominutes"]) + "</td>"
     html += "</tr>"
   }
 
@@ -217,18 +267,18 @@ function displayChapters(chapterTimes) {
   totalSlideTime = chapterTimes["total"]["totalregular"] * slidesPerMinute
   totalCourseTime = totalSlideTime + chapterTimes["total"]["totaldemos"] + chapterTimes["total"]["totalexercises"]
 
-  html += "<br><br>Total times in minutes:<br>"
-  html += "<table>"
+  html += "<br><br><b>Total times:</b><br>"
+  html += "<table id=\"totaltimes\">"
 
-  html += "<tr><td>Total Time</td><td>" + toHHMM(totalCourseTime.toFixed()) + "</td></tr>"
-  html += "<tr><td>Total Slides</td><td>" + chapterTimes["total"]["totalregular"] + "</td></tr>"
-  html += "<tr><td>Total Slide Time</td><td>" + toHHMM(totalSlideTime.toFixed()) + "</td></tr>"
-  html += "<tr><td>Total Demos</td><td>" + toHHMM(chapterTimes["total"]["totaldemos"]) + "</td></tr>"
-  html += "<tr><td>Total Exercises</td><td>" + toHHMM(chapterTimes["total"]["totalexercises"]) + "</td></tr>"
+  html += "<tr><td>Total Time</td><td align=\"right\">" + toHHMM(totalCourseTime.toFixed()) + "</td></tr>"
+  html += "<tr><td>Total Slides</td><td align=\"right\">" + chapterTimes["total"]["totalregular"] + "</td></tr>"
+  html += "<tr><td>Total Slide Time</td><td align=\"right\">" + toHHMM(totalSlideTime.toFixed()) + "</td></tr>"
+  html += "<tr><td>Total Demos</td><td align=\"right\">" + toHHMM(chapterTimes["total"]["totaldemos"]) + "</td></tr>"
+  html += "<tr><td>Total Exercises</td><td align=\"right\">" + toHHMM(chapterTimes["total"]["totalexercises"]) + "</td></tr>"
 
   html += "</table>"
 
-  html += "<br><br>" + (((chapterTimes["total"]["totaldemos"] + chapterTimes["total"]["totalexercises"]) / totalCourseTime) * 100).toFixed(1) + "% of class time is exercises/demos"
+  html += "<br><br><b>" + (((chapterTimes["total"]["totaldemos"] + chapterTimes["total"]["totalexercises"]) / totalCourseTime) * 100).toFixed(1) + "% of class time is exercises/demos</b>"
 
   $("#time").html(html)
 }
@@ -295,7 +345,7 @@ $.urlParam = function(name){
         <div id="time"></div>
       
         <div id="settingsdiv">
-          Settings:<br>
+          <b>Settings:</b><br>
           Hours Per Day:
           <input id="hoursperday" type="text" value="6.5">
 
