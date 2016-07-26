@@ -55,14 +55,22 @@ $( document ).ready(function() {
   getParamOrDefault("demomultiplier", 1, $('#demomultiplier'))
   getParamOrDefault("exercisemultiplier", 1, $('#exercisemultiplier'))
 
-  $('#threelevel').keyup(function() {
+  addShowtimes($('#threelevel'))
+  addShowtimes($('#hoursperday'))
+  addShowtimes($('#slidesperhour'))
+  addShowtimes($('#demomultiplier'))
+  addShowtimes($('#exercisemultiplier'))
+});
+
+function addShowtimes(target) {
+  target.keyup(function() {
     showTime();
   });
 
-  $('#threelevel').change(function() {
+  target.change(function() {
     showTime();
   });
-});
+}
 
 function getParamOrDefault(param, defaultValue, input) {
   paramValue = $.urlParam(param)
