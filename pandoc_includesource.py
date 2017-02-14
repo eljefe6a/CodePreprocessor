@@ -102,6 +102,8 @@ def includesource(key, value, format, meta):
 
       if highlightLineNumbers is not None:
         highlightLineNumbersArray = mixrange(highlightLineNumbers)
+      else:
+        highlightLineNumbersArray = []
 
       if highlightCharacter is None:
         highlightCharacter = "*"
