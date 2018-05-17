@@ -18,7 +18,6 @@ print "Input file:" + inputFileStr + " Output Dir:" + outputDirStr
 
 chapter =\
 """
----
 template: chapter
 name: {0}
 
