@@ -209,7 +209,7 @@ with open(inputFileStr) as inputFile:
       lineOutput = processChapter(line)
 
       # Open a new file with the name of the chapter as the file name
-      outputFile = open(outputDirStr + "/" + line.lower().replace(" ", "_").strip() + ".md",'w')
+      outputFile = open(outputDirStr + "/" + line.lower().replace(" ", "_").replace("?", "").strip() + ".md",'w')
     elif indentLevel == 2:
       # Its a section
       lineOutput = processSection(line)
