@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 from pandocfilters import toJSONFilter, stringify, CodeBlock
 import sys, re, os
