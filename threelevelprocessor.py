@@ -125,18 +125,19 @@ def processContent(line):
   if not "#" in line:
     return regular.format(line.lstrip())
   else:
-    hashtagPartitions = line.strip().partition("#")
+    hashtagIndex = line.strip().rindex("#")
 
     # Parse out hashtag
-    hashtag = hashtagPartitions[2]
+    hashtag = line.strip()[hashtagIndex + 1:]
+    slideName = line.strip()[:hashtagIndex - 1].strip()
 
     # Exercises and demos have times
     if hashtag.startswith("exercise") or hashtag.startswith("demo"):
       hashtagTime = hashtag.strip().partition(" ")
 
-      return hashtagTypes[hashtagTime[0]].format(hashtagPartitions[0].strip(), hashtagTime[2].strip())
+      return hashtagTypes[hashtagTime[0]].format(slideName, hashtagTime[2].strip())
     else:
-      return hashtagTypes[hashtag].format(hashtagPartitions[0].strip())
+      return hashtagTypes[hashtag].format(slideName)
 
 outputFile = None
 
@@ -209,7 +210,7 @@ with open(inputFileStr) as inputFile:
       lineOutput = processChapter(line)
 
       # Open a new file with the name of the chapter as the file name
-      outputFile = open(outputDirStr + "/" + line.lower().replace(" ", "_").strip() + ".md",'w')
+      outputFile = open(outputDirStr + "/" + line.lower().replace(" ", "_").replace("?", "").strip() + ".md",'w')
     elif indentLevel == 2:
       # Its a section
       lineOutput = processSection(line)
